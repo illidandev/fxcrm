@@ -1,6 +1,7 @@
 CrmAutoTestNUnit/Downloads
 CrmAutoTestNUnit/bin/
 CrmAutoTestNUnit/obj/
+CrmAutoTestNUnit/Reports
 .vs/
 log
 DataLakeTemp
