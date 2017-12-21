@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrmAutoTestNUnit", "CrmAutoTestNUnit\CrmAutoTestNUnit.csproj", "{306BD0E1-40BF-4FBB-9BCB-67DA306332BE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{306BD0E1-40BF-4FBB-9BCB-67DA306332BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{306BD0E1-40BF-4FBB-9BCB-67DA306332BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{306BD0E1-40BF-4FBB-9BCB-67DA306332BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{306BD0E1-40BF-4FBB-9BCB-67DA306332BE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E6EA115A-AAB3-4555-AD5B-A312F4E0FA11}
+	EndGlobalSection
+EndGlobal
