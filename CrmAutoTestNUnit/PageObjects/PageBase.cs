@@ -92,6 +92,11 @@ namespace CrmAutoTestNUnit.PageObjects
         }
 
 
+             //special for paging test!!!!!!!!!!!!!!!!!!!!!
+        public void SettingsOpenSubTabInstruments()
+        {
+         el.OpenTargetSubfolder(LinksPanel[3], SubFolderItemsSettings, 4); 
+        }
 
     }
 }

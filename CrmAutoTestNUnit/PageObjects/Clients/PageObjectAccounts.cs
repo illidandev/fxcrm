@@ -15,6 +15,7 @@ using CrmAutoTestNUnit.Helpers;
 using CrmAutoTestNUnit.Base_Classes;
 using CrmAutoTestNUnit;
 using System.IO;
+using CrmAutoTestNUnit.DB_connectors;
 using System.Reflection;
 using static CrmAutoTestNUnit.Helpers.Paging;
 
@@ -235,7 +236,7 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
         [FindsBy(How = How.CssSelector, Using = "div[id='6_Container'] span[class]")]
         public IList<IWebElement> AddInfoAllCheckBoxes { get; set; }
 
-        [FindsBy(How = How.CssSelector, Using = "div[id='6_Container'] input[type=text]")]
+        [FindsBy(How = How.CssSelector, Using = "div[id='6_Container'] textarea, div[id='6_Container'] input[type='text]")]
         public IWebElement AddInfoDescription { get; set; }
 
         [FindsBy(How = How.CssSelector, Using = "[id='6_Container'] a[class*=submit-button]")]
@@ -270,7 +271,8 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
         [FindsBy(How = How.CssSelector, Using = "#collapseTradeAccounts table > tbody > tr > td:nth-child(1)")]
         public IList<IWebElement> QuantityOfTradeAccounts { get; set; }
 
-        [FindsBy(How = How.CssSelector, Using = "#collapseTradeAccounts tr:nth-child(2) > td:nth-child(14) > a")]
+        //[FindsBy(How = How.CssSelector, Using = "#collapseTradeAccounts tr:nth-child(2) > td:nth-child(14) > a")]
+        [FindsBy(How = How.CssSelector, Using = "a.custom-close:first-child")]
         public IWebElement CrossDeleteTradeAccount { get; set; }
 
         /*----------------------------------------TASKS IN ACCOUNT-----------------------------------*/
@@ -292,7 +294,7 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
         [FindsBy(How = How.CssSelector, Using = "input[name=Date]")]
         public IWebElement TaskDate { get; set; }
 
-        [FindsBy(How = How.CssSelector, Using = "textarea[name=Description]")]
+        [FindsBy(How = How.CssSelector, Using = "#popup-field-control > div textarea[name=Description]")]
         public IWebElement TaskDescription { get; set; }
 
         [FindsBy(How = How.CssSelector, Using = "div.daterangepicker.dropdown-menu.ltr.single.opensright.show-calendar button.applyBtn.btn.btn-sm.btn-success")]
@@ -328,33 +330,30 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
 
 
 
-        string recordsFound = "#ctrGrid_RecordCount > strong";
-            string dropdownSelectPerPage = "select[class*=records-list]";
-        string goButton = "ctrGrid_btnGo";
-            string pagesaQua = "#jsGrid > div.jsgrid-pager-container > div";
-        string nextPge = "ctrGrid_btnImgNext";
-        string prevPage = "ctrGrid_btnImgPrevious";
-        string lastPage = "ctrGrid_btnImgLast";
-        string firstPage = "ctrGrid_btnImgFirst";
-        string setGotoPage = "#ctrGrid_txtSkipToPg";
-        string goToSkipPage = "#ctrGrid_btnImgSkipTo";
-        string tableRecords = "#ctrGrid_RadGridStyles_ctl00 tbody tr";
+        string recordsFound = "div.jsgrid-items-counter > span";
+        string dropdownSelectPerPage = "select[class*=records-list]";
+        string pagesaQua = "#jsGrid > div.jsgrid-pager-container > div";
+        string tableRecords = "div.jsgrid-grid-body > table > tbody > tr";
+        string nextPge = "span.jsgrid-pager-nav-button.next > a";
+        string prevPage = "span.jsgrid-pager-nav-button.prev> a";
+        string lastPage = "span.jsgrid-pager-nav-button.last> a";
+        string firstPage = "span.jsgrid-pager-nav-button.first> a";
+       
 
-        public PagingData StyleFolderPaging
+        
+
+        public PagingData ClientsPaging
         {
             get
             {
                 PagingData parametes = new PagingData();
                 parametes.recordsFound = recordsFound;
                 parametes.dropdownSelectPerPage = dropdownSelectPerPage;
-                parametes.goButton = goButton;
                 parametes.pagesQua = pagesaQua;
                 parametes.nextPage = nextPge;
                 parametes.prevPage = prevPage;
                 parametes.lastPage = lastPage;
                 parametes.firstPage = firstPage;
-                parametes.setGotoPage = setGotoPage;
-                parametes.goToSkipPage = goToSkipPage;
                 parametes.tableRecors = tableRecords;
                 return parametes;
             }
@@ -362,15 +361,15 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
 
 
 
-        public void CheckPagingInStyleFolder()
+        public void PagingTest()
         {
             Paging paging = new Paging();
-            string url = "http://crm.staging.fxtoptech.com/api/moduleitems/3?filterId=5";   //for lead
+            //string url = "http://crm.staging.fxtoptech.com/api/moduleitems/3?filterId=5";   //for lead json
             //paging.ItemsFound(url);    
-            paging.SelectPerPage(url, driver.FindElement(By.CssSelector(StyleFolderPaging.dropdownSelectPerPage)));
-            Thread.Sleep(2000);
-            paging.GetPagesQuantity(StyleFolderPaging);
-           
+            //paging.SelectPerPage(StyleFolderPaging, driver.FindElement(By.CssSelector(StyleFolderPaging.dropdownSelectPerPage)));
+            //Thread.Sleep(2000);
+            //paging.GetPagesQuantity(StyleFolderPaging);
+            paging.CheckPaging(ClientsPaging);
         }
 
 
@@ -378,6 +377,9 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
 
         public string digits = "123", symbols = "!@#$%^&*()_+", letters = "abcdefghijklmopqrstuvwxyz", rusLetters = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
         public string email, usFnameCheck, usLnameCheck;
+        ConnectToDb db = new ConnectToDb();
+
+        
         int accountsAfterCreation, accountsBeforeCreation;
 
         WindowsMessages popUp = new WindowsMessages();
@@ -458,7 +460,7 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
         }
 
          
-        public void CreateValAccOrLead(string leadOrAcc) //additional function
+        public void CreateValAccOrLead(string leadOrAcc, bool checkIsEmailFollows = false) //additional function
         {
             BtnNew.Click();
             Thread.Sleep(3000);
@@ -491,12 +493,25 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             BtnSave.Click();
             SeleniumGetMethod.WaitForPageLoad(driver);
             SeleniumGetMethod.WaitForElement(driver, BtnAddComments);
+            if (leadOrAcc == "account" && checkIsEmailFollows == true)
+            {
+                try
+                {
+                    Assert.AreEqual(email, emailToStore.Text);
+                    PropertiesCollection._reportingTasks.Log(Status.Info, "Here is email var " + email);
+                    PropertiesCollection._reportingTasks.Log(Status.Info, "Here is email to store value  " + emailToStore.Text);
+                }
+                catch
+                {
+                    PropertiesCollection._reportingTasks.Log(Status.Info, "Something wrong with checking following email");
+                }
+            }
             if (leadOrAcc == "lead")
             {
                 email = emailToStore.Text;
             }
-            Console.WriteLine(leadOrAcc + "email is " + email);
-            Console.WriteLine(leadOrAcc + " has been created");
+            PropertiesCollection._reportingTasks.Log(Status.Info, leadOrAcc + "email is " + email);
+            PropertiesCollection._reportingTasks.Log(Status.Info, leadOrAcc + " has been created");
         }
 
 
@@ -558,9 +573,16 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             new WebDriverWait(PropertiesCollection.driver, TimeSpan.FromSeconds(3000)).Until(ExpectedConditions.ElementToBeClickable(BtnSave));
             BtnSave.Click();
             Thread.Sleep(2000);
-            if (leadOrAcc == "account")
+            if (leadOrAcc == "account") 
             {
-                Assert.IsTrue(AllValidators.Count == 6 & VisibleValidators.Count == 6);
+                try
+                {
+                    Assert.IsTrue(AllValidators.Count == 7 & VisibleValidators.Count == 7);
+                }
+                catch
+                {
+                    PropertiesCollection._reportingTasks.Log(Status.Info, " Can't count validators using assert.. ");
+                }
             }
             Assert.IsTrue(popUp.IsPopUpVisible(PopUpDetector));
             /*foreach (var valid in AllValidators)
@@ -577,7 +599,7 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
                 }
                 if (CreateAccAllFields[i].TagName == "select")
                 {
-                    SeleniumSetMethods.SelectDropDown(CreateAccAllFields[i], Helpers.Randomizer.Number(1, allContries));
+                    SeleniumSetMethods.SelectDropDown(CreateAccAllFields[i],1);
                 }
                 Thread.Sleep(1000);
             }
@@ -585,7 +607,14 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             Thread.Sleep(2000);
             if (leadOrAcc == "account")
             {
-                Assert.IsTrue(VisibleValidators.Count == 3);
+                try
+                {
+                    Assert.IsTrue(VisibleValidators.Count == 3);
+                }
+                catch
+                {
+                    PropertiesCollection._reportingTasks.Log(Status.Info, " Can't count validators using assert.. ");
+                }
             }
             Assert.IsTrue(popUp.IsPopUpVisible(PopUpDetector));
            /* foreach (var valid in VisibleValidators)
@@ -610,7 +639,14 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             Thread.Sleep(2000);
             if (leadOrAcc == "account")
             {
-                Assert.IsTrue(VisibleValidators.Count == 3);
+                try
+                {
+                    Assert.IsTrue(VisibleValidators.Count == 3);
+                }
+                catch
+                {
+                    PropertiesCollection._reportingTasks.Log(Status.Info, " Can't count validators using assert.. ");
+                }
             }
             Assert.IsTrue(popUp.IsPopUpVisible(PopUpDetector));
             /*foreach (var valid in VisibleValidators)
@@ -636,11 +672,11 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
                 }
                 if (field.TagName == "select")
                 {
-                    SeleniumSetMethods.SelectDropDown(field, Helpers.Randomizer.Number(1, allContries));
+                    SeleniumSetMethods.SelectDropDown(field,1);
                 }
                 Thread.Sleep(1000);
             }
-            /*-------------------------------------CLOSE BUTTON POPUP CHECK THAT FEILDS ARE EMPTY -------------------------------------*/
+            /*-------------------------------------CLOSE BUTTON POPUP CHECK THAT FIELDS ARE EMPTY -------------------------------------*/
             BtnCloseCross.Click();
             Thread.Sleep(2000);
             Assert.IsFalse(popUp.IsPopUpVisible(PopUpDetector));
@@ -658,21 +694,29 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
                 }
                 if (field.TagName == "select")
                 {
-                    SeleniumSetMethods.SelectDropDown(field, Helpers.Randomizer.Number(1, allContries));
+                    SeleniumSetMethods.SelectDropDown(field,1);
                 }
                 Thread.Sleep(1000);
             }
             /*-------------------------------------CHECK CREATE VALID ACCOUNT-------------------------------------*/
             BtnCloseCross.Click();
-           
-            if (leadOrAcc == "lead")
+
+            /*if (leadOrAcc == "lead")
             {
-                accountsBeforeCreation = JavaScriptInvoker.ReadHttpResponseJSon("http://crm.staging.fxtoptech.com/api/moduleitems/3?filterId=5");
+               accountsBeforeCreation = JavaScriptInvoker.ReadHttpResponseJSon("http://crm.staging.fxtoptech.com/api/moduleitems/3?filterId=5");
             }
             if (leadOrAcc == "account")
             {
                 accountsBeforeCreation =JavaScriptInvoker.ReadHttpResponseJSon("http://crm.staging.fxtoptech.com/api/moduleitems/1?filterId=1200");
-            }     
+            }     */
+            try
+            {
+                accountsBeforeCreation = db.ConnectToDbTest();
+            }
+            catch
+            {
+                PropertiesCollection._reportingTasks.Log(Status.Info, " Can't connet to db....");
+            }
             //int accountsBeforeCreation = AccountsInTheGrid.Count;
             //new WebDriverWait(PropertiesCollection.driver, TimeSpan.FromSeconds(3000)).Until(ExpectedConditions.ElementToBeClickable(BtnNew));
             Thread.Sleep(2000);
@@ -685,12 +729,13 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             if (leadOrAcc == "account")
             {
                 UserPassword.SendKeys(Helpers.Randomizer.String(5, letters));
+                SeleniumSetMethods.SelectDropDown(UserGroup,1);
             }
-            SeleniumSetMethods.SelectDropDown(UserCountry, Helpers.Randomizer.Number(1, allContries)); //allContries
+            SeleniumSetMethods.SelectDropDown(UserCountry, Helpers.Randomizer.Number(1, allContries)); 
+
             usFnameCheck = UserFirstName.GetAttribute("value");
             usLnameCheck = UserLastName.GetAttribute("value");            
-            int all  = SeleniumGetMethod.GetQuantityOfOptionsInDropDown(UserCountry);
-            PropertiesCollection._reportingTasks.Log(Status.Info, "there are countries : " +all);
+         
             new WebDriverWait(PropertiesCollection.driver, TimeSpan.FromSeconds(3000)).Until(ExpectedConditions.ElementToBeClickable(BtnSave));
             BtnSave.Click();
             SeleniumGetMethod.WaitForPageLoad(driver);
@@ -743,15 +788,25 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
                 el.OpenTargetSubfolder(LinksPanel[0], SubFolderItemsClients, 0);
             }
             Thread.Sleep(3000);
-            if (leadOrAcc == "lead")
+            /*if (leadOrAcc == "lead")
             {
                 accountsAfterCreation = JavaScriptInvoker.ReadHttpResponseJSon("http://crm.staging.fxtoptech.com/api/moduleitems/3?filterId=5");
             }
             if (leadOrAcc == "account")
             {
                 accountsAfterCreation = JavaScriptInvoker.ReadHttpResponseJSon("http://crm.staging.fxtoptech.com/api/moduleitems/1?filterId=1200");
+            }*/
+            try
+            {
+                accountsAfterCreation = db.ConnectToDbTest();
             }
+            catch
+            {
+                PropertiesCollection._reportingTasks.Log(Status.Info, " Can't connet to db....");
+            }
+
             PropertiesCollection._reportingTasks.Log(Status.Info, "There were " + accountsBeforeCreation + " account before.<br> Now there are " + accountsAfterCreation + " accounts");
+
             try
             {
                 Assert.IsTrue(accountsAfterCreation - accountsBeforeCreation == 1);
@@ -773,7 +828,14 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
                 UserPhone.SendKeys(Helpers.Randomizer.String(7, digits));
                 UserPassword.SendKeys(Helpers.Randomizer.String(5, letters));
                 SeleniumSetMethods.SelectDropDown(UserCountry, Helpers.Randomizer.Number(1, allContries));
-                //SeleniumSetMethods.SelectDropDown(UserCountry, Helpers.Randomizer.Number(1, 200));
+                try
+                {
+                    SeleniumSetMethods.SelectDropDown(UserGroup, 1);
+                }
+                catch (Exception)
+                {
+                    PropertiesCollection._reportingTasks.Log(Status.Info, "there is no user group drop down");
+                }
                 BtnSave.Click();
                 Thread.Sleep(2000);
                 try
@@ -1098,9 +1160,60 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             SeleniumGetMethod.WaitForPageLoad(driver);
         }
 
-        public void CreateLeadWithAccEmail()
+        public void LeadAndAccMarkInfoEqual()
         {
+            OpenLeadTab();
+            CreateValAccOrLead("lead");
+            CheckAccountMarkInfoAdress();
 
+            IList<IWebElement> markInfoFealds = driver.FindElements(By.CssSelector("div[id*='3_Container'] td > div.value > div > div"));
+            List<string> markInfoLeadFealdsText = new List<string>();
+            foreach (var el in markInfoFealds)
+            {
+                markInfoLeadFealdsText.Add(el.Text);
+            }
+            
+            BtnTPAccountCreate.Click();
+            SeleniumGetMethod.WaitForElement(driver, SelectGroupTPAccount);
+            SeleniumSetMethods.SelectDropDown(SelectGroupTPAccount,1);
+            BtnSave.Click();
+            Thread.Sleep(2000);
+            SeleniumGetMethod.WaitForPageLoad(driver);
+            SeleniumGetMethod.WaitForElement(driver,BackToAccLink);
+
+            markInfoFealds = driver.FindElements(By.CssSelector("div[id*='3_Container'] td > div.value > div > div"));
+            List<string> markInfoAccFealdsText = new List<string>();
+            foreach (var el in markInfoFealds)
+            {
+                markInfoAccFealdsText.Add(el.Text);
+            }
+
+             /*// different order in lead and acc
+             for (int i = 0; i < markInfoAccFealdsText.Count; i++)
+            {
+                Console.WriteLine(markInfoLeadFealdsText[i] + " equal " + " " + markInfoAccFealdsText[i]);
+            }
+            Console.WriteLine("");*/
+
+            markInfoAccFealdsText.Sort();
+            markInfoLeadFealdsText.Sort();
+            for (int i = 0; i < markInfoAccFealdsText.Count; i++)
+            {
+                PropertiesCollection._reportingTasks.Log(Status.Info, "<b>field from lead</b> " + markInfoLeadFealdsText[i] + " <br><b>field from acc</b> " + " " + markInfoAccFealdsText[i]);
+            }
+            try
+            {
+                for (int i = 0; i < markInfoAccFealdsText.Count; i++)
+                {
+                    Assert.AreEqual(markInfoLeadFealdsText[i], markInfoAccFealdsText[i]);
+                }
+            }
+            catch
+            {
+                PropertiesCollection._reportingTasks.Log(Status.Info, "Something wrong with marketing info");
+            }
+
+            BackToAccLink.Click();
         }
 
     }

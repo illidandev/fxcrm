@@ -52,6 +52,7 @@ namespace CrmAutoTestNUnit
         {
            
             WebDriverWait wait = new WebDriverWait(driver, new TimeSpan(0, 0, 30));
+            System.Threading.Thread.Sleep(1000);
             wait.Until(d =>
             {
                 try

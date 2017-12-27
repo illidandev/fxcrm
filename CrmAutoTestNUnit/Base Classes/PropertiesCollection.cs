@@ -36,8 +36,7 @@ namespace CrmAutoTestNUnit
 
         protected string browserName;
         protected string user;
-
-        public PropertiesCollection(string browserName, string user)
+        public PropertiesCollection(string user, string browserName)
         {
             this.browserName = browserName;
             this.user = user;

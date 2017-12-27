@@ -21,14 +21,17 @@ using System.Reflection;
 using System.Net;
 using Newtonsoft.Json;
 using System.Web;
+using CrmAutoTestNUnit.DB_connectors;
 
 namespace CrmAutoTestNUnit.Test
 {
-    [TestFixture("Chrome","egor.t")]
+    [TestFixture("egor.t","Chrome")]
     public class Clients : PropertiesCollection
     {
         public Clients(string browserName, string user) : base(browserName, user) { }
 
+        ConnectToDb db = new ConnectToDb();
+        
 
         [Test,Category("Check Sort")]
         //[Ignore("Ignore a fixture")]
@@ -58,12 +61,17 @@ namespace CrmAutoTestNUnit.Test
 
 
         [Test, Category("Check PAGING")]
+        //[Repeat(3)]
+        [Ignore("Ignore a fixture")]
         public void TryCheckPaging()
         {
             var pageAccounts = _pages.GetPage<PageObjectAccounts>();
             pageAccounts.OpenLeadTab();
+                        //pageAccounts.SettingsOpenSubTabInstruments();
             //inside leads
-            pageAccounts.CheckPagingInStyleFolder();
+            pageAccounts.PagingTest();
+            //pageAccounts.OpenAccountTab();
+            //pageAccounts.PagingTest();
         }
 
 
@@ -129,18 +137,34 @@ namespace CrmAutoTestNUnit.Test
 
 
         [Test, Category("Check Account Folder")]
-        public void CreateAccOrLeadUniversal()
+        public void CreateAccAndLeadEmailFollow()
         {
             var pageAccounts = _pages.GetPage<PageObjectAccounts>();
-            //Thread.Sleep(3000);
-            //pageAccounts.OpenLeadTab();
-            //pageAccounts.CreateValAccOrLead("lead");
+            Thread.Sleep(3000);
+            pageAccounts.OpenLeadTab();
+            pageAccounts.CreateValAccOrLead("lead");
             Thread.Sleep(3000);
             pageAccounts.OpenAccountTab();
-            pageAccounts.CreateValAccOrLead("account");
+            pageAccounts.CreateValAccOrLead("account", true);
+            /*_reportingTasks.Log(Status.Info, "HERE IS THE LAST CHECK )");
+            pageAccounts.OpenAccountTab();
+            pageAccounts.CreateValAccOrLead("account");*/
+        }
+
+        [Test, Category("Check Account Lead Mark Info")]
+        public void CheckMarkInfoLeadAcc()
+        {
+            var pageAccounts = _pages.GetPage<PageObjectAccounts>();
+            pageAccounts.LeadAndAccMarkInfoEqual();
         }
 
 
+        [Test, Category("DB")]
+       // [Ignore("Ignore a fixture")]
+        public void CheckDbConnetection()
+        { 
+            db.ConnectToDbTest();           
+        }
 
 
     }
