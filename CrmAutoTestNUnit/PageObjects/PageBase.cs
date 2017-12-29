@@ -9,6 +9,7 @@ using OpenQA.Selenium.Support.PageObjects;
 using AventStack.ExtentReports;
 using CrmAutoTestNUnit.Base_Classes;
 using CrmAutoTestNUnit.Helpers;
+using System.Threading;
 
 namespace CrmAutoTestNUnit.PageObjects
 {
@@ -30,6 +31,32 @@ namespace CrmAutoTestNUnit.PageObjects
 
 
 
+        //-----------------------SEARCH FORM FIELDS----------------------------------------------------------
+        [FindsBy(How = How.CssSelector, Using = "[name*=_condition]")]
+        public IList<IWebElement> SearchFormInputs { get; set; }
+
+        [FindsBy(How = How.CssSelector, Using = ".jsgrid-filter-row select")]
+        public IList<IWebElement> SearchFormDropDowns { get; set; }
+
+        [FindsBy(How = How.CssSelector, Using = "[name*=Date]")]
+        public IWebElement SearchFormCreatedDate { get; set; }
+
+        [FindsBy(How = How.CssSelector, Using = "div.calendar.left input")]
+        public IWebElement CalendarBoxFrom { get; set; }
+
+        [FindsBy(How = How.CssSelector, Using = "div.calendar.right input")]
+        public IWebElement CalendarBoxTo { get; set; }
+
+        [FindsBy(How = How.CssSelector, Using = "div.daterangepicker_input > input")]
+        public IList<IWebElement> CalendarBoxFromTo { get; set; }
+
+        [FindsBy(How = How.CssSelector, Using = "button.applyBtn.btn.btn-sm.btn-success")]
+        public  IWebElement BtnApply { get; set; }
+
+        [FindsBy(How = How.CssSelector, Using = "i[title]")]
+        public IWebElement xClearAllFilters { get; set; }
+
+        //---------------------------------------------------------------------------------
 
         [FindsBy(How = How.CssSelector, Using = "#navbar > ul.nav.navbar-nav.main-nav > li> a > span")]
         public IList<IWebElement> LinksPanel { get; set; }
@@ -96,6 +123,49 @@ namespace CrmAutoTestNUnit.PageObjects
         public void SettingsOpenSubTabInstruments()
         {
          el.OpenTargetSubfolder(LinksPanel[3], SubFolderItemsSettings, 4); 
+        }
+
+
+        public virtual void CheckSearch() 
+        {
+            foreach (var drl in SearchFormDropDowns)
+            {
+                SeleniumSetMethods.SelectDropDown(drl, 1);
+                SeleniumGetMethod.WaitForPageLoad(driver);
+                Thread.Sleep(2000);
+            }
+            foreach (var field in SearchFormInputs)
+            {
+                field.SendKeys(Helpers.Randomizer.String(7));
+            }
+            SearchFormCreatedDate.Click();
+            try
+            {
+                foreach (var date in CalendarBoxFromTo)
+                {
+                    date.Clear();
+                    date.SendKeys(WindowsMessages.GetCurDate(1));
+                    SeleniumGetMethod.WaitForPageLoad(driver);
+                    Thread.Sleep(1000);
+                }
+                BtnApply.Click();
+            }
+            catch
+            {
+                PropertiesCollection._reportingTasks.Log(Status.Info, "Can't manipulate calendarboxes");
+            }
+          
+            SeleniumGetMethod.WaitForPageLoad(driver);
+            Thread.Sleep(3000);
+            try
+            {
+                xClearAllFilters.Click();
+            }
+            catch
+            {
+                PropertiesCollection._reportingTasks.Log(Status.Info, "Can't set null filters");
+            }
+            SeleniumGetMethod.WaitForPageLoad(driver);
         }
 
     }

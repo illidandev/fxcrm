@@ -12,7 +12,6 @@ using CrmAutoTestNUnit.Helpers;
 using System.IO;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
-//using CrmAutoTestNUnit.TestsInputData;
 using CrmAutoTestNUnit.Base_Classes;
 using OpenQA.Selenium.Interactions;
 using CrmAutoTestNUnit.PageObjects.Clients;
@@ -31,7 +30,8 @@ namespace CrmAutoTestNUnit.Test
         public Clients(string browserName, string user) : base(browserName, user) { }
 
         ConnectToDb db = new ConnectToDb();
-        
+        ForexCrmFolders el = new ForexCrmFolders();
+
 
         [Test,Category("Check Sort")]
         //[Ignore("Ignore a fixture")]
@@ -48,15 +48,16 @@ namespace CrmAutoTestNUnit.Test
 
         [Test, Category("Check Search")]
         //[Repeat(3)]
-        public void TryCheckSearchClients()
+        public void CheckSearchClientsAllSubFolders()
         {
+         
             var pageAccounts = _pages.GetPage<PageObjectAccounts>();
-                    //inside accounts
-                pageAccounts.CheckSearch(); 
-            pageAccounts.OpenLeadTab();
+            for (int i = 0; i < pageAccounts.SubFolderItemsClients.Count; i++)
+            {
+                el.OpenTargetSubfolder(pageAccounts.LinksPanel[0], pageAccounts.SubFolderItemsClients, i);
                 pageAccounts.CheckSearch();
-            pageAccounts.OpenTradeAccountsTab();
-                pageAccounts.CheckSearch();
+            }
+
         }
 
 

@@ -90,26 +90,26 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
         public IList<IWebElement> AccountsInTheGrid { get; set; }
 
         /*------------------------------------------------------SEARCH FORM FIELDS CLIENTS----------------------------------------------*/
-        [FindsBy(How = How.CssSelector, Using = "[name*=_condition]")]
-        public IList<IWebElement> SearchFormInputs { get; set; }
 
+        //inTo PageBase
+        /*
+        [FindsBy(How = How.CssSelector, Using = "[name*=_condition]")]
+        public IList<IWebElement> SearchFormInputs { get; set; }  
         [FindsBy(How = How.CssSelector, Using = ".jsgrid-filter-row select")]
         public IList<IWebElement> SearchFormDropDowns { get; set; }
-       
         [FindsBy(How = How.CssSelector, Using = "[name*=Date]")]
         public IWebElement SearchFormCreatedDate { get; set; }
-
         [FindsBy(How = How.CssSelector, Using = "div.calendar.left input")]
         public IWebElement CalendarBoxFrom { get; set; }
         [FindsBy(How = How.CssSelector, Using = "div.calendar.right input")]
         public IWebElement CalendarBoxTo { get; set; }
         [FindsBy(How = How.CssSelector, Using = "div.daterangepicker_input > input")]
         public IList<IWebElement> CalendarBoxFromTo { get; set; }
-       
-
         [FindsBy(How = How.CssSelector, Using = "button.applyBtn.btn.btn-sm.btn-success")]
         public IWebElement BtnApply { get; set; }
-        
+        [FindsBy(How = How.CssSelector, Using = "i[title]")]
+        public IWebElement xClearAllFilters { get; set; }*/
+
 
         [FindsBy(How = How.CssSelector, Using = "td:nth-child(5) > div > div > div > button")]
         public IWebElement DrlCountryExpander { get; set; }
@@ -121,9 +121,7 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
 
         [FindsBy(How = How.CssSelector, Using = "#JColResizer0 > tbody > tr.jsgrid-filter-row > td > div > div > in")]
         public IList<IWebElement> AllCrossesClearFilters { get; set; }
-        [FindsBy(How = How.CssSelector, Using = "i[title]")]
-        public IWebElement xClearAllFilters { get; set; }
-
+        
        
         [FindsBy(How = How.CssSelector, Using = ".jsgrid-filter-row select[name*=Status]")]
         public IWebElement DrlStatusInSearchWithPostBack { get; set; }
@@ -405,8 +403,8 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
        
 
 
-
-        public void CheckSearch()
+       // virtual in page base
+        public override void CheckSearch()
         {
             //need gett quantity of dropDowns
             foreach(var drl in SearchFormDropDowns)

@@ -134,10 +134,12 @@
     <Compile Include="Helpers\Randomizer.cs" />
     <Compile Include="Helpers\JavaScriptInvoker.cs" />
     <Compile Include="Helpers\WindowsMessages.cs" />
+    <Compile Include="PageObjects\Activities\PageObjectActivities.cs" />
     <Compile Include="PageObjects\Clients\PageObjectAccounts.cs" />
     <Compile Include="PageObjects\LoginPageObjects.cs" />
     <Compile Include="PageObjects\PagesManager.cs" />
     <Compile Include="PageObjects\PageBase.cs" />
+    <Compile Include="Tests\Activities.cs" />
     <Compile Include="Tests\Clients.cs" />
     <Compile Include="Base Classes\PropertiesCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
