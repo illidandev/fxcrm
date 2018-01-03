@@ -21,7 +21,7 @@ namespace CrmAutoTestNUnit.DB_connectors
         {
             /* if we have more than 1 column
             List<string> dataFromDb = new List<string>();*/
-            string dataFromDb="";
+            string dataFromDb= "";
             _conf = TestsConfiguration.Instance;
             string pth = System.Reflection.Assembly.GetCallingAssembly().CodeBase;
             string actualPath = pth.Substring(0, pth.IndexOf("bin"));
