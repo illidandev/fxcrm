@@ -48,8 +48,8 @@ namespace CrmAutoTestNUnit.Helpers
                 }
                 var selectElement = new SelectElement(dropdownSelectPerPage);
                 SeleniumGetMethod.WaitForPageLoad(PropertiesCollection.driver);
-                //selectElement.SelectByIndex(i - 1);
-                selectElement.SelectByIndex(0);
+                selectElement.SelectByIndex(i - 1);
+                //selectElement.SelectByIndex(0);
                 var valueSelected = selectElement.SelectedOption.Text;
                 SeleniumGetMethod.WaitForPageLoad(PropertiesCollection.driver);
                 PropertiesCollection._reportingTasks.Log(Status.Info, "Selected value...: " + valueSelected);
@@ -68,7 +68,15 @@ namespace CrmAutoTestNUnit.Helpers
             IWebElement pagesaQua = PropertiesCollection.driver.FindElement(By.CssSelector(pagesQuantity.pagesQua));
             string textPages = pagesaQua.Text;
             string[] several = textPages.Split('f');
-            int value = Int32.Parse(several[1]);
+            int value = 0;
+            try
+            {
+               value = Int32.Parse(several[1]);
+            }
+            catch(Exception msg)
+            {
+                PropertiesCollection._reportingTasks.Log(Status.Info, "I can't convert this string to integer..<br>" + msg.ToString());
+            }
             PropertiesCollection._reportingTasks.Log(Status.Info, "pages text : " + textPages);
             PropertiesCollection._reportingTasks.Log(Status.Info, "There are pages we have : " + value);
             Console.WriteLine("Pages quantity is " + value);
@@ -113,13 +121,24 @@ namespace CrmAutoTestNUnit.Helpers
             IList<IWebElement> tableRecors = PropertiesCollection.driver.FindElements(By.CssSelector(data.tableRecors));
             int records = GetTableRecords(tableRecors);
             PropertiesCollection._reportingTasks.Log(Status.Info, "Selected per page value : " + selectedValue + "<br>" + "There are records in the grid...: " + records);
-            Assert.IsTrue(selectedValue == records, "Paging doesn't work properly!!!");
+            try
+            {
+                Assert.IsTrue(selectedValue == records, "Paging doesn't work properly!!!");
+            }
+            catch(Exception message)
+            {
+                PropertiesCollection._reportingTasks.Log(Status.Info, "paging works wrong, try catch works" + "<br>" + message.ToString());
+            }
 
             int numberPages = GetPagesQuantity(data);
             /*string quatLabel = PageOfPagesLogic(data).ToString();
             Assert.IsTrue(quatLabel == $"1 of {numberPages}", "Paging doesn't work properly - smth wrong with label...");
             PropertiesCollection._reportingTasks.Log(Status.Info, "LABEL VALUE : " + quatLabel);*/
-
+            if(numberPages == 0)
+            {
+                PropertiesCollection._reportingTasks.Log(Status.Warning, "Number of pages returns 0 so it's impossible to test paging here...");
+                return;
+            }
             if (numberPages == 1)
             {
                 PropertiesCollection._reportingTasks.Log(Status.Info, "There is only 1 page...");

@@ -108,7 +108,10 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
         [FindsBy(How = How.CssSelector, Using = "button.applyBtn.btn.btn-sm.btn-success")]
         public IWebElement BtnApply { get; set; }
         [FindsBy(How = How.CssSelector, Using = "i[title]")]
-        public IWebElement xClearAllFilters { get; set; }*/
+        public IWebElement xClearAllFilters { get; set; }
+         [FindsBy(How = How.CssSelector, Using = "input.jsgrid-button.jsgrid-search-button")]
+        public IWebElement BtnSearch { get; set; }
+             */
 
 
         [FindsBy(How = How.CssSelector, Using = "td:nth-child(5) > div > div > div > button")]
@@ -130,8 +133,7 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
         public IWebElement DrlOwnerInSearchWithPostBack { get; set; }
         
 
-        [FindsBy(How = How.CssSelector, Using = "input.jsgrid-button.jsgrid-search-button")]
-        public IWebElement BtnSearch { get; set; }
+       
 
         /*-------------------EDIT ACCOUNT INSIDE---------------------------------------------------*/
         [FindsBy(How = How.CssSelector, Using = "[id*='1_Container'] a[class*=edit]")]
@@ -328,7 +330,7 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
 
 
 
-        string recordsFound = "div.jsgrid-items-counter > span";
+        /*string recordsFound = "div.jsgrid-items-counter > span";
         string dropdownSelectPerPage = "select[class*=records-list]";
         string pagesaQua = "#jsGrid > div.jsgrid-pager-container > div";
         string tableRecords = "div.jsgrid-grid-body > table > tbody > tr";
@@ -368,7 +370,7 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             //Thread.Sleep(2000);
             //paging.GetPagesQuantity(StyleFolderPaging);
             paging.CheckPaging(ClientsPaging);
-        }
+        }*/
 
 
 
@@ -417,23 +419,42 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             {
                 field.SendKeys(Helpers.Randomizer.String(7));
             }
-            SearchFormCreatedDate.Click();
-            foreach (var date in CalendarBoxFromTo)
+            for (int i = 0; i < SearchFormCreatedDate.Count; i++)
             {
-                date.Clear();
-                date.SendKeys(WindowsMessages.GetCurDate(1));
-                SeleniumGetMethod.WaitForPageLoad(driver);
-                Thread.Sleep(1000);
+                SeleniumGetMethod.WaitForElement(driver, SearchFormCreatedDate[i]);
+                SearchFormCreatedDate[i].Click();
+                try
+                {
+                    foreach (var date in CalendarBoxFromTo)
+                    {
+                        if (date.Displayed)
+                        {
+                            date.Clear();
+                            date.SendKeys(WindowsMessages.GetCurDate(1));
+                            SeleniumGetMethod.WaitForPageLoad(driver);
+                        }
+                    }
+                    if (BtnApply[i].Displayed)
+                    {
+                        SeleniumGetMethod.WaitForElement(driver, BtnApply[i]);
+                        BtnApply[i].Click();
+                        SeleniumGetMethod.WaitForPageLoad(driver);
+                        Thread.Sleep(1000);
+                        SeleniumGetMethod.WaitForPageLoad(driver);
+                    }
+                }
+                catch (Exception msg)
+                {
+                    PropertiesCollection._reportingTasks.Log(Status.Info, "Can't manipulate calendarboxes..<br>" + msg.ToString());
+                }
             }
-            BtnApply.Click();
-            SeleniumGetMethod.WaitForPageLoad(driver);
-            Thread.Sleep(3000);
             xClearAllFilters.Click();
             SeleniumGetMethod.WaitForPageLoad(driver);
         }
 
 
-        public void CheckSort()
+                 // virtual in page base
+        public override void  CheckSort()
         {
             IList<IWebElement> gridHeaders = driver.FindElements(By.CssSelector("tr.jsgrid-header-row > th[class*=sortable]> div > div.text-ellipsis > span"));
                             //ASC

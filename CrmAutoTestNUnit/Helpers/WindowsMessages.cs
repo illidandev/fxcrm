@@ -41,28 +41,25 @@ namespace CrmAutoTestNUnit.Helpers
             {
                 culture = new CultureInfo("en-US");
                 cdate = DateTime.Now.ToString("M/d/yyyy");
-                Console.WriteLine("Current date formant of {0} culture is  : {1}  today: {2}", culture.DisplayName, culture.DateTimeFormat.ShortDatePattern, cdate);
+                //Console.WriteLine("Current date formant of {0} culture is  : {1}  today: {2}", culture.DisplayName, culture.DateTimeFormat.ShortDatePattern, cdate);
                 return cdate;
             }
             if (cultureYouNeed == 2)        //GERMANY-TURKEY
             {
                 culture = new CultureInfo("de-DE");
                 cdate = DateTime.Now.ToString("dd.MM.yyyy");
-                Console.WriteLine("Current date formant of {0} culture is  : {1}  today: {2}", culture.DisplayName, culture.DateTimeFormat.ShortDatePattern, cdate);
                 return cdate;
             }
             if (cultureYouNeed == 3)        //FRA-ITALY
             {
                 culture = new CultureInfo("fr-FR");
                 cdate = DateTime.Now.ToString("dd/MM/yyyy");
-                Console.WriteLine("Current date formant of {0} culture is  : {1}  today: {2}", culture.DisplayName, culture.DateTimeFormat.ShortDatePattern, cdate);
                 return cdate;
             }
             if (cultureYouNeed == 4)        //CHINA
             {
                 culture = new CultureInfo("zh-CHS");
                 cdate = DateTime.Now.ToString("yyyy/M/d");
-                Console.WriteLine("Current date formant of {0} culture is  : {1}  today : {2}", culture.DisplayName, culture.DateTimeFormat.ShortDatePattern, cdate);
                 return cdate;
             }
             else return DateTime.Now.ToString("M/d/yyyy");
@@ -73,12 +70,12 @@ namespace CrmAutoTestNUnit.Helpers
         {
             var tomorrow = DateTime.Now.AddDays(1);
             string cdate = tomorrow.ToString("M/d/yyyy");
-            Console.WriteLine(cdate);
+            //Console.WriteLine(cdate);
             return cdate;
         }
 
 
-            public bool IsPopUpVisible(IWebElement element)
+        public bool IsPopUpVisible(IWebElement element)
         {
             Thread.Sleep(3000);
             bool isPopUpVis = false;
@@ -94,13 +91,12 @@ namespace CrmAutoTestNUnit.Helpers
                 PropertiesCollection._reportingTasks.Log(Status.Info, isPopUpVis.ToString());
                 return isPopUpVis;
             }
-            catch(Exception)
+            catch(Exception msg)
             {
-                PropertiesCollection._reportingTasks.Log(Status.Info, "Can't check is pop up visible....");
+                PropertiesCollection._reportingTasks.Log(Status.Info, "Can't check is pop up visible....<br>" + msg.ToString());
                 PropertiesCollection._reportingTasks.Log(Status.Info, isPopUpVis.ToString());
                 return isPopUpVis;
             }
-
         }
     }
 }

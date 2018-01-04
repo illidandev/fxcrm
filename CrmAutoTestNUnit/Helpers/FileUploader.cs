@@ -75,21 +75,6 @@ namespace CrmAutoTestNUnit.Helpers
             PropertiesCollection._reportingTasks.Log(Status.Info, "Files founded BEFORE: " + quantityFilesBefore.ToString() + "<br>" + " Files founded AFTER : " + quantityFilesAfter.ToString());
         }
 
-        public static void ExcelDownLoadForIE(IWebElement excExportButton, IList<IWebElement> closeWaitSpinner)
-        {
-            excExportButton.Click();
-            Thread.Sleep(10000);
-            closeWaitSpinner[0].Click();
-            Thread.Sleep(3000);
-            SendKeys.SendWait("^(j)");
-            Thread.Sleep(3000);
-            SendKeys.SendWait("{DOWN}");
-            SendKeys.SendWait("{DOWN}");
-            SendKeys.SendWait("{UP}");
-            SendKeys.SendWait("{UP}");
-            SendKeys.SendWait("{ENTER}");
-            Thread.Sleep(5000);
-            SendKeys.SendWait("{ESC}");
-        }
+        
     }
 }

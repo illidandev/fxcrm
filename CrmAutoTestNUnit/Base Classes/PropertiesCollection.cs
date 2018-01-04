@@ -150,6 +150,8 @@ namespace CrmAutoTestNUnit
             }
 
         }
+
+
         private static void FiringDriver_Navigate(object sender, WebDriverNavigationEventArgs e)
         {
             _reportingTasks.Log(Status.Info, "Navigate to URL "+ e.Driver.Url);
@@ -167,50 +169,6 @@ namespace CrmAutoTestNUnit
             driver.Quit();
             driver.Dispose();
         }
-
-       /* public static IEnumerable<String> BrowserToRunWith()
-        {
-            String[] browsers = TestsInputData.AutomationSettings.BrowserToRunWith.Split(',');
-            String[] users = TestsInputData.AutomationSettings.Users.Split(',');
-
-            foreach (String b in browsers)
-            {
-                yield return b;
-            }
-        }*/
-
-
-        static object[] BrowserUser =
-        {
-            //new object[] { "ie","ET"},
-            new object[] { "Edge", "userSel" },
-            new object[] { "Chrome","UserET"}
-        };
-
-        static object[] BrowserUserControlPanel =
-        {
-            //new object[] { "Edge", "userSel" },
-            //new object[] { "ie","ET"}
-            new object[] { "Chrome","ET"}
-
-
-        };
-
-        static object[] BrowserStyle =
-        {
-            new object[] { "Chrome","ET"},
-            //new object[] { "ie","ET"}
-            //new object[] { "Edge", "userSel" }
-
-        };
-
-        static object[] BrowserLogin =
-        {
-            //new object[] { "Chrome", "veryyyyyyyylonnnnnnnnnnnnnnnggggggggggggggggguuuuuuuseeeeeerrrrrrNammmmmmmmmmme","plmon1234@"},
-            new object[] { "ie","ET","plmon1234@111"}
-            //new object[] { "Edge", "ET", "!@$^$$%^%&^^*&(*(*)())()))_++" }
-
-        };
     }
 
 }

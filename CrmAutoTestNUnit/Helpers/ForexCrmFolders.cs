@@ -24,6 +24,7 @@ namespace CrmAutoTestNUnit.Helpers
             //(new Actions(PropertiesCollection.driver)).MoveToElement(folderToOpen).Perform();
             folderToOpen.Click();
             SeleniumGetMethod.WaitForElement(PropertiesCollection.driver, folderItems.Last());
+            PropertiesCollection._reportingTasks.Log(Status.Info, "<b> Folder to open:  </b>:  " + "<h3>" + folderToOpen.Text + " ---> " + folderItems[indexItemToOpen].Text+ "</h3>");
             folderItems[indexItemToOpen].Click();
             SeleniumGetMethod.WaitForPageLoad(PropertiesCollection.driver);
             Thread.Sleep(2000);

@@ -39,7 +39,7 @@ namespace CrmAutoTestNUnit.PageObjects
         public IList<IWebElement> SearchFormDropDowns { get; set; }
 
         [FindsBy(How = How.CssSelector, Using = "[name*=Date]")]
-        public IWebElement SearchFormCreatedDate { get; set; }
+        public IList<IWebElement> SearchFormCreatedDate { get; set; }
 
         [FindsBy(How = How.CssSelector, Using = "div.calendar.left input")]
         public IWebElement CalendarBoxFrom { get; set; }
@@ -51,10 +51,13 @@ namespace CrmAutoTestNUnit.PageObjects
         public IList<IWebElement> CalendarBoxFromTo { get; set; }
 
         [FindsBy(How = How.CssSelector, Using = "button.applyBtn.btn.btn-sm.btn-success")]
-        public  IWebElement BtnApply { get; set; }
+        public IList<IWebElement> BtnApply { get; set; }
 
         [FindsBy(How = How.CssSelector, Using = "i[title]")]
         public IWebElement xClearAllFilters { get; set; }
+
+        [FindsBy(How = How.CssSelector, Using = "input.jsgrid-button.jsgrid-search-button")]
+        public IWebElement BtnSearch { get; set; }
 
         //---------------------------------------------------------------------------------
 
@@ -79,6 +82,55 @@ namespace CrmAutoTestNUnit.PageObjects
 
         [FindsBy(How = How.CssSelector, Using = ".modal-content")]
         public IWebElement PopUpDetector { get; set; }
+
+        [FindsBy(How = How.CssSelector, Using = "#create-filter-link")]
+        public IWebElement CreateFiltA { get; set; }
+
+        [FindsBy(How = How.CssSelector, Using = "div.item.choosen-columns select[name]")]
+        public IList<IWebElement> FiltersDrls { get; set; }
+       
+
+        string recordsFound = "div.jsgrid-items-counter > span";
+        string dropdownSelectPerPage = "select[class*=records-list]";
+        string pagesaQua = "#jsGrid > div.jsgrid-pager-container > div";
+        string tableRecords = "div.jsgrid-grid-body > table > tbody > tr";
+        string nextPge = "span.jsgrid-pager-nav-button.next > a";
+        string prevPage = "span.jsgrid-pager-nav-button.prev> a";
+        string lastPage = "span.jsgrid-pager-nav-button.last> a";
+        string firstPage = "span.jsgrid-pager-nav-button.first> a";
+
+
+
+
+        public PagingData ClientsPaging
+        {
+            get
+            {
+                PagingData parametes = new PagingData();
+                parametes.recordsFound = recordsFound;
+                parametes.dropdownSelectPerPage = dropdownSelectPerPage;
+                parametes.pagesQua = pagesaQua;
+                parametes.nextPage = nextPge;
+                parametes.prevPage = prevPage;
+                parametes.lastPage = lastPage;
+                parametes.firstPage = firstPage;
+                parametes.tableRecors = tableRecords;
+                return parametes;
+            }
+        }
+
+
+
+        public void PagingTest()
+        {
+            Paging paging = new Paging();
+            //string url = "http://crm.staging.fxtoptech.com/api/moduleitems/3?filterId=5";   //for lead json
+            //paging.ItemsFound(url);    
+            //paging.SelectPerPage(StyleFolderPaging, driver.FindElement(By.CssSelector(StyleFolderPaging.dropdownSelectPerPage)));
+            //Thread.Sleep(2000);
+            //paging.GetPagesQuantity(StyleFolderPaging);
+            paging.CheckPaging(ClientsPaging);
+        }
 
 
 
@@ -126,8 +178,70 @@ namespace CrmAutoTestNUnit.PageObjects
         }
 
 
+
+
+        public virtual void CheckSort()
+        {
+            IList<IWebElement> gridHeaders = driver.FindElements(By.CssSelector("tr.jsgrid-header-row > th[class*=sortable]> div > div.text-ellipsis > span"));
+                            //ASC
+            for (int i = 0; i < gridHeaders.Count; i++)
+            {
+                gridHeaders[i].Click();
+                SeleniumGetMethod.WaitForPageLoad(driver);
+                SeleniumGetMethod.WaitForElement(driver, gridHeaders[i]);
+                        //DESC
+                gridHeaders[i].Click();
+                SeleniumGetMethod.WaitForPageLoad(driver);
+                SeleniumGetMethod.WaitForElement(driver, gridHeaders[i]);
+                var text = gridHeaders[i].GetAttribute("textContent");
+                PropertiesCollection._reportingTasks.Log(Status.Info, "Sort by column" + " " + (i + 1) + " column name is " + text);
+            }
+        }
+
+            //for future testing
+        public void CheckFilters()
+        {
+            CreateFiltA.Click();
+            Thread.Sleep(3000);
+            for (int i = 0; i < FiltersDrls.Count; i++)
+            {
+                SeleniumSetMethods.SelectDropDown(FiltersDrls[i], 1);
+                Thread.Sleep(2000);
+            }
+        }
+
+
         public virtual void CheckSearch() 
         {
+            for (int i = 0; i < SearchFormCreatedDate.Count; i++)
+            {
+                SeleniumGetMethod.WaitForElement(driver, SearchFormCreatedDate[i]);
+                SearchFormCreatedDate[i].Click();
+                try
+                {
+                    foreach (var date in CalendarBoxFromTo)
+                    {
+                        if (date.Displayed)
+                        {
+                            date.Clear();
+                            date.SendKeys(WindowsMessages.GetCurDate(1));
+                            SeleniumGetMethod.WaitForPageLoad(driver);           
+                        }
+                    }
+                    if(BtnApply[i].Displayed)
+                    {
+                        SeleniumGetMethod.WaitForElement(driver, BtnApply[i]);
+                        BtnApply[i].Click();
+                        SeleniumGetMethod.WaitForPageLoad(driver);
+                        Thread.Sleep(1000);
+                        SeleniumGetMethod.WaitForPageLoad(driver);
+                    }  
+                }
+                catch (Exception msg)
+                {
+                    PropertiesCollection._reportingTasks.Log(Status.Info, "Can't manipulate calendarboxes..<br>" + msg.ToString());
+                }
+            }
             foreach (var drl in SearchFormDropDowns)
             {
                 SeleniumSetMethods.SelectDropDown(drl, 1);
@@ -137,36 +251,20 @@ namespace CrmAutoTestNUnit.PageObjects
             foreach (var field in SearchFormInputs)
             {
                 field.SendKeys(Helpers.Randomizer.String(7));
-            }
-            SearchFormCreatedDate.Click();
-            try
-            {
-                foreach (var date in CalendarBoxFromTo)
-                {
-                    date.Clear();
-                    date.SendKeys(WindowsMessages.GetCurDate(1));
-                    SeleniumGetMethod.WaitForPageLoad(driver);
-                    Thread.Sleep(1000);
-                }
-                BtnApply.Click();
-            }
-            catch
-            {
-                PropertiesCollection._reportingTasks.Log(Status.Info, "Can't manipulate calendarboxes");
-            }
-          
+            }     
             SeleniumGetMethod.WaitForPageLoad(driver);
             Thread.Sleep(3000);
             try
             {
                 xClearAllFilters.Click();
+                Thread.Sleep(2000);
+                BtnSearch.Click();
             }
-            catch
+            catch (Exception msg)
             {
-                PropertiesCollection._reportingTasks.Log(Status.Info, "Can't set null filters");
+                PropertiesCollection._reportingTasks.Log(Status.Info, "Can't set null filters uisng x(cross) link...<br>" + msg.ToString());
             }
             SeleniumGetMethod.WaitForPageLoad(driver);
         }
-
     }
 }

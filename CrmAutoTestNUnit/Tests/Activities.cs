@@ -31,7 +31,10 @@ namespace CrmAutoTestNUnit.Tests
         ConnectToDb db = new ConnectToDb();
         ForexCrmFolders el = new ForexCrmFolders();
 
-        [Test, Category("Check Sort")]
+
+
+
+        [Test, Category("Go trough all subfolders")]
         public void GoThroughAllSubFolders()
         {
             var pageActivities = _pages.GetPage<PageObjectActivities>();
@@ -39,6 +42,15 @@ namespace CrmAutoTestNUnit.Tests
 
         }
 
+
+        [Test, Category("Check Search")]
+        public void CheckFilters()
+        {
+            var pageActivities = _pages.GetPage<PageObjectActivities>();
+            pageActivities.CheckFilters();
+        }
+
+       
 
 
         [Test, Category("Check Search")]
@@ -49,7 +61,35 @@ namespace CrmAutoTestNUnit.Tests
             {
                 el.OpenTargetSubfolder(pageActivities.LinksPanel[1], pageActivities.SubFolderItemsActivities, i);
                 pageActivities.CheckSearch();
+                //pageActivities.CheckFilters();
             }
+        }
+
+
+        [Test, Category("Check Sort")]
+        public void CheckSortActivitiesAllSubFolders()
+        {
+            var pageActivities = _pages.GetPage<PageObjectActivities>();
+            for (int i = 0; i < pageActivities.SubFolderItemsActivities.Count; i++)
+            {
+                el.OpenTargetSubfolder(pageActivities.LinksPanel[1], pageActivities.SubFolderItemsActivities, i);
+                pageActivities.CheckSort();
+            }
+
+        }
+
+
+        [Test, Category("Check paging in Activities")]
+        public void CheckPagingActivities()
+        {
+            var pageActivities = _pages.GetPage<PageObjectActivities>();
+            // for (int i = 0; i < pageActivities.SubFolderItemsActivities.Count; i++)
+            for (int i = 0; i < 2; i++)
+            {
+                el.OpenTargetSubfolder(pageActivities.LinksPanel[1], pageActivities.SubFolderItemsActivities, i);
+                pageActivities.PagingTest();
+            }
+
         }
 
 

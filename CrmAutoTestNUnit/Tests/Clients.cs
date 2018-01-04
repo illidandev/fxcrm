@@ -34,7 +34,7 @@ namespace CrmAutoTestNUnit.Test
 
 
         [Test,Category("Check Sort")]
-        //[Ignore("Ignore a fixture")]
+       //[Ignore("Ignore a fixture")]
         public void TryCheckSortClients()
         {
             var pageAccounts = _pages.GetPage<PageObjectAccounts>();
@@ -47,7 +47,7 @@ namespace CrmAutoTestNUnit.Test
         }
 
         [Test, Category("Check Search")]
-        //[Repeat(3)]
+        [Ignore("Ignore a fixture")]
         public void CheckSearchClientsAllSubFolders()
         {
          
@@ -63,7 +63,7 @@ namespace CrmAutoTestNUnit.Test
 
         [Test, Category("Check PAGING")]
         //[Repeat(3)]
-        [Ignore("Ignore a fixture")]
+        //[Ignore("Ignore a fixture")]
         public void TryCheckPaging()
         {
             var pageAccounts = _pages.GetPage<PageObjectAccounts>();
@@ -96,6 +96,7 @@ namespace CrmAutoTestNUnit.Test
 
 
         [Test, Category("Check tabs switching")]
+        //[Ignore("Ignore a fixture")]
         public void CheckTabsSwitch()
         {
          
@@ -110,7 +111,7 @@ namespace CrmAutoTestNUnit.Test
 
 
         [Test, Category("Check Lead Folder")]
-         //[Repeat(5)]
+        [Ignore("Ignore a fixture")]
         public void CheckLeadFolder()
         {
          
@@ -138,6 +139,7 @@ namespace CrmAutoTestNUnit.Test
 
 
         [Test, Category("Check Account Folder")]
+        [Ignore("Ignore a fixture")]
         public void CreateAccAndLeadEmailFollow()
         {
             var pageAccounts = _pages.GetPage<PageObjectAccounts>();
@@ -153,6 +155,7 @@ namespace CrmAutoTestNUnit.Test
         }
 
         [Test, Category("Check Account Lead Mark Info")]
+        [Ignore("Ignore a fixture")]
         public void CheckMarkInfoLeadAcc()
         {
             var pageAccounts = _pages.GetPage<PageObjectAccounts>();
@@ -161,7 +164,7 @@ namespace CrmAutoTestNUnit.Test
 
 
         [Test, Category("DB")]
-       // [Ignore("Ignore a fixture")]
+        [Ignore("Ignore a fixture")]
         public void CheckDbConnetection()
         { 
             db.ConnectToDbTest();           
