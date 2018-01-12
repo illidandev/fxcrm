@@ -15,14 +15,14 @@ using CrmAutoTestNUnit.Helpers;
 
 namespace CrmAutoTestNUnit
 {
-    enum PropertyType
-    {
-        Id,
-        Name,
-        CssName,
-        ClassName,
-        Xpath
-    }
+    //enum PropertyType
+    //{
+    //    Id,
+    //    Name,
+    //    CssName,
+    //    ClassName,
+    //    Xpath
+    //}
 
 
     [TestFixture]
@@ -56,10 +56,10 @@ namespace CrmAutoTestNUnit
                                                   //Init test Name to log
             _reportingTasks.InitializeTest();
             var Description = TestContext.CurrentContext.Test.Properties.Get("Description")?.ToString() ?? string.Empty;
-            _reportingTasks.Log(Status.Info, "<h4>Description test </h4>"+Description + "<br>");
+            _reportingTasks.Log(Status.Info, "<h4> Tests' steps description  </h4>"+Description + "<br>");
                                                          //Init Web driver  
             driver = WebDriverFactory.GetWebDriver(browserName);
-            _reportingTasks.Log(Status.Debug, "<b>Tests executed in " + browserName);
+            _reportingTasks.Log(Status.Debug, "<b>Tests are executed in " + browserName);
             EventFiringWebDriver firingDriver = new EventFiringWebDriver(driver);
             firingDriver.ExceptionThrown += FiringDriver_TakeScreenshotOnException;
             firingDriver.ElementClicked += FiringDriver_Cliked;
@@ -133,8 +133,10 @@ namespace CrmAutoTestNUnit
 
             try
             {
-                var elem = e.Element.GetAttribute("Id");
-                _reportingTasks.Log(Status.Pass, "User click " + elem);
+                //var elem = e.Element.GetAttribute("Id");
+                var elemTag = e.Element.TagName;
+                var elemText = e.Element.Text;
+                _reportingTasks.Log(Status.Pass, "User clicks element, tag's name is: " + "<b>"+elemTag+"</b>" + ", innerText is : " + "<b>"+elemText+"</b>");
             }
             catch (StaleElementReferenceException ex)
             {

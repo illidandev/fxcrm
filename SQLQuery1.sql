@@ -75,3 +75,15 @@ ORDER BY
 
 	select *from crm_Users
 	select *from crm_Filters
+	
+	
+	
+	
+	
+	//сумма до двум таблицам
+	select 
+ ( select count(*) from crm_Leads )
++ 
+ ( select count(*) from crm_Accounts ) 
+as 
+   total_rows

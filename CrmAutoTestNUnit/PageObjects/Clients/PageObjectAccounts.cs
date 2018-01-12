@@ -35,9 +35,11 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
 
         [FindsBy(How = How.CssSelector, Using = "a.button.submit-button")]
         public IWebElement BtnSave { get; set; }
+                
 
-        [FindsBy(How = How.CssSelector, Using = "a.button.button2")]
-        public IWebElement BtnCancel { get; set; }
+        //virtual in page base
+        //[FindsBy(How = How.CssSelector, Using = "a.button.button2")]
+        //public override IWebElement BtnCancel { get; set; }
 
         [FindsBy(How = How.CssSelector, Using = "div.modal-header > button[class=close]")]
         public IWebElement BtnCloseCross { get; set; }
@@ -236,7 +238,7 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
         [FindsBy(How = How.CssSelector, Using = "div[id='6_Container'] span[class]")]
         public IList<IWebElement> AddInfoAllCheckBoxes { get; set; }
 
-        [FindsBy(How = How.CssSelector, Using = "div[id='6_Container'] textarea, div[id='6_Container'] input[type='text]")]
+        [FindsBy(How = How.CssSelector, Using = "div[id='6_Container'] textarea, div[id='6_Container'] input[type='text']")]
         public IWebElement AddInfoDescription { get; set; }
 
         [FindsBy(How = How.CssSelector, Using = "[id='6_Container'] a[class*=submit-button]")]
@@ -322,9 +324,6 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
         [FindsBy(How = How.CssSelector, Using = "select[name=TransactionApproval]")]
         public IWebElement TransTrApprovalDrl { get; set; }
 
-        [FindsBy(How = How.CssSelector, Using = "head > title")]
-        public IWebElement TransPageTitle { get; set; }
-
         [FindsBy(How = How.CssSelector, Using = "td:nth-child(4) a[href]")]
         public IWebElement BackToTpAcc { get; set; }
 
@@ -375,7 +374,7 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
 
 
 
-        public string digits = "123", symbols = "!@#$%^&*()_+", letters = "abcdefghijklmopqrstuvwxyz", rusLetters = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
+        public string digits = "1234567890", symbols = "!@#$%^&*()_+", letters = "abcdefghijklmopqrstuvwxyz", rusLetters = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
         public string email, usFnameCheck, usLnameCheck;
         ConnectToDb db = new ConnectToDb();
 
@@ -405,8 +404,8 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
        
 
 
-       // virtual in page base
-        public override void CheckSearch()
+             // virtual in page base
+        /*public override void CheckSearch()
         {
             //need gett quantity of dropDowns
             foreach(var drl in SearchFormDropDowns)
@@ -450,11 +449,11 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             }
             xClearAllFilters.Click();
             SeleniumGetMethod.WaitForPageLoad(driver);
-        }
+        }*/
 
 
                  // virtual in page base
-        public override void  CheckSort()
+        /*public override void  CheckSort()
         {
             IList<IWebElement> gridHeaders = driver.FindElements(By.CssSelector("tr.jsgrid-header-row > th[class*=sortable]> div > div.text-ellipsis > span"));
                             //ASC
@@ -476,7 +475,7 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
                 Console.WriteLine("");
             }
             Console.WriteLine("");
-        }
+        }*/
 
          
         public void CreateValAccOrLead(string leadOrAcc, bool checkIsEmailFollows = false) //additional function
@@ -503,9 +502,9 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
                 {
                     SeleniumSetMethods.SelectDropDown(UserGroup, Helpers.Randomizer.Number(1, 2));
                 }
-                catch
+                catch(Exception msg)
                 {
-                    PropertiesCollection._reportingTasks.Log(Status.Info, "there is no group when you create acc");
+                    PropertiesCollection._reportingTasks.Log(Status.Info, "there is no group when you create acc..<br>" + msg.ToString());
                 }
             }
             SeleniumGetMethod.WaitForElement(driver, BtnSave);           
@@ -520,9 +519,9 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
                     PropertiesCollection._reportingTasks.Log(Status.Info, "Here is email var " + email);
                     PropertiesCollection._reportingTasks.Log(Status.Info, "Here is email to store value  " + emailToStore.Text);
                 }
-                catch
+                catch (Exception msg)
                 {
-                    PropertiesCollection._reportingTasks.Log(Status.Info, "Something wrong with checking following email");
+                    PropertiesCollection._reportingTasks.Log(Status.Info, "Something wrong with checking following email...<br>" + msg.ToString());
                 }
             }
             if (leadOrAcc == "lead")
@@ -554,9 +553,9 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             {
                 SeleniumSetMethods.SelectDropDown(UserGroup, Helpers.Randomizer.Number(1, 2));
             }
-            catch
+            catch(Exception msg)
             {
-                PropertiesCollection._reportingTasks.Log(Status.Info, "there is no group when you create acc");
+                PropertiesCollection._reportingTasks.Log(Status.Info, "there is no group when you create acc...<br>" + msg.ToString());
             }
             BtnSave.Click();
             Thread.Sleep(3000);
@@ -572,9 +571,9 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
                     PropertiesCollection._reportingTasks.Log(Status.Info, "Account has been created");
                 }
             }
-            catch (Exception)
+            catch (Exception msg)
             {
-                PropertiesCollection._reportingTasks.Log(Status.Info, "Can't check are is user log in");
+                PropertiesCollection._reportingTasks.Log(Status.Info, "Can't check are is user log in...<br>" + msg.ToString());
             }
             Console.WriteLine("Accont email is "+ email);
             Console.WriteLine("Accont has been created");
@@ -596,11 +595,11 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             {
                 try
                 {
-                    Assert.IsTrue(AllValidators.Count == 7 & VisibleValidators.Count == 7);
+                    Assert.IsTrue(AllValidators.Count == 6 & VisibleValidators.Count == 6);         // 7 for new enveronment
                 }
-                catch
+                catch(Exception msg)
                 {
-                    PropertiesCollection._reportingTasks.Log(Status.Info, " Can't count validators using assert.. ");
+                    PropertiesCollection._reportingTasks.Log(Status.Info, " Can't count validators using assert...<br>" + msg.ToString());
                 }
             }
             Assert.IsTrue(popUp.IsPopUpVisible(PopUpDetector));
@@ -630,9 +629,9 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
                 {
                     Assert.IsTrue(VisibleValidators.Count == 3);
                 }
-                catch
+                catch (Exception msg)
                 {
-                    PropertiesCollection._reportingTasks.Log(Status.Info, " Can't count validators using assert.. ");
+                    PropertiesCollection._reportingTasks.Log(Status.Info, " Can't count validators using assert...<br>" + msg.ToString());
                 }
             }
             Assert.IsTrue(popUp.IsPopUpVisible(PopUpDetector));
@@ -662,9 +661,9 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
                 {
                     Assert.IsTrue(VisibleValidators.Count == 3);
                 }
-                catch
+                catch (Exception msg)
                 {
-                    PropertiesCollection._reportingTasks.Log(Status.Info, " Can't count validators using assert.. ");
+                    PropertiesCollection._reportingTasks.Log(Status.Info, " Can't count validators using assert...<br>" + msg.ToString());
                 }
             }
             Assert.IsTrue(popUp.IsPopUpVisible(PopUpDetector));
@@ -732,9 +731,9 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             {
                 accountsBeforeCreation = db.ConnectToDbTest();
             }
-            catch
+            catch(Exception msg)
             {
-                PropertiesCollection._reportingTasks.Log(Status.Info, " Can't connet to db....");
+                PropertiesCollection._reportingTasks.Log(Status.Info, " Can't connet to db....<br>" + msg.ToString());
             }
             //int accountsBeforeCreation = AccountsInTheGrid.Count;
             //new WebDriverWait(PropertiesCollection.driver, TimeSpan.FromSeconds(3000)).Until(ExpectedConditions.ElementToBeClickable(BtnNew));
@@ -745,11 +744,19 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             UserLastName.SendKeys("userLastName" + Helpers.Randomizer.String(5));
             UserEmail.SendKeys("test" +Helpers.Randomizer.String(5,letters) +"@" +Helpers.Randomizer.String(2,letters) +"." + Helpers.Randomizer.String(2,letters));
             UserPhone.SendKeys(Helpers.Randomizer.String(7, digits));
-            if (leadOrAcc == "account")
+            try
             {
-                UserPassword.SendKeys(Helpers.Randomizer.String(5, letters));
-                SeleniumSetMethods.SelectDropDown(UserGroup,1);
+            if (leadOrAcc == "account")
+                {
+                    UserPassword.SendKeys(Helpers.Randomizer.String(5, letters));
+                    SeleniumSetMethods.SelectDropDown(UserGroup, 1);
+                }
             }
+            catch(Exception msg)
+            {
+                PropertiesCollection._reportingTasks.Log(Status.Info, "There is no group drl when you create acc...<br>" + msg.ToString());
+            }
+            
             SeleniumSetMethods.SelectDropDown(UserCountry, Helpers.Randomizer.Number(1, allContries)); 
 
             usFnameCheck = UserFirstName.GetAttribute("value");
@@ -781,9 +788,9 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
                     Assert.IsTrue(acId.Contains("LE"));
                 }
             }
-            catch (Exception)
+            catch (Exception msg)
             {
-                PropertiesCollection._reportingTasks.Log(Status.Info, "Can't check are is user log in");
+                PropertiesCollection._reportingTasks.Log(Status.Info, "Can't check are is user log in...<br>" + msg.ToString());
             }
 
             CheckAccountEditGenInfo(leadOrAcc);  //check edit gen info
@@ -792,13 +799,13 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             CheckAccountActions(leadOrAcc);      //check create tp acc
             CheckAccountMarkInfoAdress();       //check acc marketing and address
             CheckAccountAddInfo();              //check add info
+            CheckAccountTasks(leadOrAcc);
             if (leadOrAcc == "account")
             {
-                CheckAccountDocuments();
+               // CheckAccountDocuments();
                 CheckAccountTradeAcc();
                 CheckAccountFinTrans();
             }
-            CheckAccountTasks(leadOrAcc);
             Thread.Sleep(3000);
             ImgMainPage.Click();
             if (leadOrAcc == "lead")
@@ -819,9 +826,9 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             {
                 accountsAfterCreation = db.ConnectToDbTest();
             }
-            catch
+            catch(Exception msg)
             {
-                PropertiesCollection._reportingTasks.Log(Status.Info, " Can't connet to db....");
+                PropertiesCollection._reportingTasks.Log(Status.Info, " Can't connet to db....<br>" + msg.ToString());
             }
 
             PropertiesCollection._reportingTasks.Log(Status.Info, "There were " + accountsBeforeCreation + " account before.<br> Now there are " + accountsAfterCreation + " accounts");
@@ -830,9 +837,9 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             {
                 Assert.IsTrue(accountsAfterCreation - accountsBeforeCreation == 1);
             }
-            catch (Exception)
+            catch (Exception msg)
             {
-                PropertiesCollection._reportingTasks.Log(Status.Info, "Something wrong with checking quantity of users");
+                PropertiesCollection._reportingTasks.Log(Status.Info, "Something wrong with checking quantity of users..<br>" + msg.ToString());
             }
             /*-------------------------------------CHECK CREATE ACCOUNT WITH EXISTING EMAIL-------------------------------------*/
             if (leadOrAcc == "account")
@@ -851,9 +858,9 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
                 {
                     SeleniumSetMethods.SelectDropDown(UserGroup, 1);
                 }
-                catch (Exception)
+                catch (Exception msg)
                 {
-                    PropertiesCollection._reportingTasks.Log(Status.Info, "there is no user group drop down");
+                    PropertiesCollection._reportingTasks.Log(Status.Info, "There is no user group dropdown...<br>" + msg.ToString());
                 }
                 BtnSave.Click();
                 Thread.Sleep(2000);
@@ -861,9 +868,9 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
                 {
                     Assert.IsTrue(SeleniumGetMethod.IsElementExists(driver, ExisEmailValid)); 
                 }
-                catch (Exception)
+                catch (Exception msg)
                 {
-                    PropertiesCollection._reportingTasks.Log(Status.Info, "Something wrong with emails duplicates testing");
+                    PropertiesCollection._reportingTasks.Log(Status.Info, "Something wrong with emails duplicates testing...<br>" + msg.ToString());
                 }
             }
 
@@ -923,6 +930,13 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             SeleniumGetMethod.WaitForElement(driver, SelectGroupTPAccount);
             SeleniumSetMethods.SelectDropDown(SelectGroupTPAccount, Helpers.Randomizer.Number(1,allGroups));
             BtnSave.Click();
+            Thread.Sleep(2000);
+            if (SeleniumGetMethod.IsElementExists(driver, PosibleBadReqCreatTrAcc) && PosibleBadReqCreatTrAcc.Text != "")
+            {
+                Thread.Sleep(3000);
+                BtnCancel.Click();
+                PropertiesCollection._reportingTasks.Log(Status.Fail, "<b>There is issue when user creates account</b>..<br>" + PosibleBadReqCreatTrAcc.Text);
+            }
             Thread.Sleep(3000);
             if (leadOrAcc == "lead")
             {
@@ -930,13 +944,13 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             }
             if (leadOrAcc == "account")
             {
-                        //change password
+                            //change password
+                SeleniumGetMethod.WaitForElement(driver, BackToAccLink);
                 BackToAccLink.Click();
                 SeleniumGetMethod.WaitForPageLoad(driver);
                 Thread.Sleep(2000);
                 string oldPass = GenInfoPassword.Text;
                 PropertiesCollection._reportingTasks.Log(Status.Info, "Old password " + oldPass);
-
                 BtnChangePassword.Click();
                 Thread.Sleep(2000);
                 InputNewPassword.SendKeys(Helpers.Randomizer.String(3, rusLetters) + Helpers.Randomizer.String(3, letters) + Helpers.Randomizer.String(2, symbols) + Helpers.Randomizer.String(2, digits));
@@ -954,9 +968,9 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
                 {
                     Assert.IsTrue(oldPass != newPass);
                 }
-                catch (Exception)
+                catch (Exception msg)
                 {
-                    PropertiesCollection._reportingTasks.Log(Status.Info, "Something wrong with password changes");
+                    PropertiesCollection._reportingTasks.Log(Status.Info, "Something wrong with password changes...<br>" + msg.ToString());
                 }
             } 
         }
@@ -1031,15 +1045,15 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             {
                 Assert.IsTrue(QuantityOfUploadedFiles.Count == 3);
             }
-            catch (Exception)
+            catch (Exception msg)
             {
-                PropertiesCollection._reportingTasks.Log(Status.Warning, "Something wrong with quantity of files");
+                PropertiesCollection._reportingTasks.Log(Status.Warning, "Something wrong with quantity of files...<br>" + msg.ToString());
             }
         }
 
 
 
-        public void CheckAccountTradeAcc()
+        public void CheckAccountTradeAcc(bool isSingleForActivities = false)
         {
             Thread.Sleep(2000);
             int counter = 1;
@@ -1054,11 +1068,31 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
                 SeleniumSetMethods.SelectDropDown(SelectGroupTPAccount, Helpers.Randomizer.Number(1, allAllOptions));
                 Thread.Sleep(3000);
                 BtnSaveTPAccount.Click();
+                Thread.Sleep(2000);
                 SeleniumGetMethod.WaitForPageLoad(driver);
+                try
+                {
+                    if (SeleniumGetMethod.IsElementExists(driver, PosibleBadReqCreatTrAcc) && PosibleBadReqCreatTrAcc.Text != "")
+                    {
+                        Thread.Sleep(3000);
+                        BtnCancel.Click();
+                        PropertiesCollection._reportingTasks.Log(Status.Fail, "<b>There is issue when user creates account</b>..<br>" + PosibleBadReqCreatTrAcc.Text);
+                    }
+                }
+                catch(Exception msg)
+                {
+                    PropertiesCollection._reportingTasks.Log(Status.Fail, "Something wrong with pop up when you create tp account.<br>" + msg.ToString());
+                }
                 new WebDriverWait(PropertiesCollection.driver, TimeSpan.FromSeconds(3000)).Until(ExpectedConditions.ElementIsVisible(By.CssSelector("div[class=value] a[href*=ACC]")));
                 BackToAccLink.Click();
                 SeleniumGetMethod.WaitForPageLoad(driver);
                 Thread.Sleep(2000);
+                if (isSingleForActivities)
+                {
+                    Thread.Sleep(2000);
+                    PropertiesCollection._reportingTasks.Log(Status.Info, "<b><em>Create only one trade account for testing activitites...</b></em>");
+                    return; // in case we want to create one tpAccount
+                }
                 counter++;
             }
             while (counter <= 3);
@@ -1068,11 +1102,11 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             try
             {
                 PropertiesCollection._reportingTasks.Log(Status.Info, "There are " + QuantityOfTradeAccounts.Count + " trade accounts");
-                Assert.IsTrue(QuantityOfTradeAccounts.Count == 3);
+                Assert.IsTrue(QuantityOfTradeAccounts.Count == 4);
             }
-            catch (Exception)
+            catch (Exception msg)
             {
-                PropertiesCollection._reportingTasks.Log(Status.Warning, "Something wrong with quantity of files");
+                PropertiesCollection._reportingTasks.Log(Status.Warning, "Something wrong with quantity of trade accounts...<br>" + msg.ToString());
             }
             CrossDeleteTradeAccount.Click();
             BtnSave.Click();
@@ -1080,15 +1114,18 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             Thread.Sleep(3000);
             try
             {
-                Assert.IsTrue(QuantityOfTradeAccounts.Count == 2);
+                Assert.IsTrue(QuantityOfTradeAccounts.Count == 3);
                 PropertiesCollection._reportingTasks.Log(Status.Info, "There are " + QuantityOfTradeAccounts.Count + " trade accounts");
             }
-            catch (Exception)
+            catch (Exception msg)
             {
-                PropertiesCollection._reportingTasks.Log(Status.Warning, "Something wrong with quantity of files");
+                PropertiesCollection._reportingTasks.Log(Status.Warning, "Something wrong with quantity of files...<br>" + msg.ToString());
             }
         }
         
+
+
+
         public void CheckAccountTasks(string leadOrAcc)
         { 
             new WebDriverWait(PropertiesCollection.driver, TimeSpan.FromSeconds(3000)).Until(ExpectedConditions.ElementIsVisible(By.CssSelector("div[class=value] a[href*=ACC]")));
@@ -1143,7 +1180,7 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             Thread.Sleep(2000);
         }
 
-        public void CheckAccountFinTrans()
+        public void CheckAccountFinTrans(bool isForActivities = false)
         {
             Thread.Sleep(2000);
             BackToAccLink.Click();
@@ -1162,16 +1199,26 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
             new WebDriverWait(PropertiesCollection.driver, TimeSpan.FromSeconds(3000)).Until(ExpectedConditions.ElementIsVisible(By.CssSelector("a.button.submit-button")));
             BtnSave.Click();
             SeleniumGetMethod.WaitForPageLoad(driver);
-            Thread.Sleep(2000);
-            string pageTitle = TransPageTitle.GetAttribute("innerText");
+            Thread.Sleep(4000);
+            string pageTitle = driver.Title;
             try
             {
                 Assert.IsTrue(pageTitle == "Monetary Transaction");
                 PropertiesCollection._reportingTasks.Log(Status.Info, "Page title is " + pageTitle);
+                Assert.IsTrue(SeleniumGetMethod.IsElementExists(driver,TransactTypeLabel));
+                PropertiesCollection._reportingTasks.Log(Status.Info, "Transaction Type label is :  " + TransactTypeLabel.Text);
             }
-            catch (Exception)
+            catch (Exception msg)
             {
-                PropertiesCollection._reportingTasks.Log(Status.Warning, "Something wrong with transactions");
+                PropertiesCollection._reportingTasks.Log(Status.Warning, "Something wrong with transactions....<br>" + msg.ToString());
+                PropertiesCollection._reportingTasks.Log(Status.Info, "Page title is " + pageTitle);
+            }
+            SeleniumGetMethod.WaitForElement(driver, BackToTpAcc);
+            if(isForActivities)
+            {
+                Thread.Sleep(2000);
+                PropertiesCollection._reportingTasks.Log(Status.Info, "<b><em>Create only one transaction for testing activitites...</em></b>");
+                return;  // in case we want test activities
             }
             BackToTpAcc.Click();
             SeleniumGetMethod.WaitForPageLoad(driver);
@@ -1227,13 +1274,16 @@ namespace CrmAutoTestNUnit.PageObjects.Clients
                     Assert.AreEqual(markInfoLeadFealdsText[i], markInfoAccFealdsText[i]);
                 }
             }
-            catch
+            catch(Exception msg)
             {
-                PropertiesCollection._reportingTasks.Log(Status.Info, "Something wrong with marketing info");
+                PropertiesCollection._reportingTasks.Log(Status.Info, "Something wrong with marketing info...<br>" + msg.ToString());
             }
 
             BackToAccLink.Click();
         }
+
+
+
 
     }
 }

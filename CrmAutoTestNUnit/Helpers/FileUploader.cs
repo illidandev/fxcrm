@@ -45,11 +45,10 @@ namespace CrmAutoTestNUnit.Helpers
                     Thread.Sleep(3000);
                     SendKeys.SendWait(@"{Enter}");
                     Thread.Sleep(3000);
-                    WindowsMessages w = new WindowsMessages();
                     saveButton.Click();
-                                //because there is exception in log ((
-                    /* if (!w.IsAlertPresent())
-                    {  
+                    //because there is exception in log ((
+                    /*if (!WindowsMessages.IsAlertPresent())
+                    {
                         saveButton.Click();
                     }*/
 

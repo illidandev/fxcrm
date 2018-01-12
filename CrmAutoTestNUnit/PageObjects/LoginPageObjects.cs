@@ -45,17 +45,13 @@ namespace CrmAutoTestNUnit
                         //waiting to ensure that we can obtain current url properly
             Thread.Sleep(5000);
                              //check correct login  
-            //string failMessage = "Ooopps login test failed";
-            string currentUrl = driver.Url;
-            /*char parseUsing = '?';
-            string[] substrings = currentUrl.Split(parseUsing);
-            string theFirstSubString = substrings[0];*/
+            string currentUrl = driver.Url;      
             Console.WriteLine(currentUrl);
             bool isLoginSuccesful = currentUrl.Contains("ModuleItems");
             Assert.IsTrue(isLoginSuccesful);
             if(isLoginSuccesful)
             {
-                PropertiesCollection._reportingTasks.Log(Status.Info, "Login test works! ");
+                PropertiesCollection._reportingTasks.Log(Status.Info, "<b>LOGIN SUCCESSFUL</b> ");
             }
         }
     }

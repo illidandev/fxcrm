@@ -5,6 +5,7 @@ using System.Text;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System.Threading.Tasks;
+using AventStack.ExtentReports;
 
 namespace CrmAutoTestNUnit
 {
@@ -52,9 +53,28 @@ namespace CrmAutoTestNUnit
 
             new SelectElement(element).SelectByIndex(value);
 
+        }
+
+        public static void SelectDropDownRandom(IWebElement element)
+        {
+            int allOptions = SeleniumGetMethod.GetQuantityOfOptionsInDropDown(element);
+            if(allOptions == 0)
+            {
+                PropertiesCollection._reportingTasks.Log(Status.Info, "<b> There are no options in drop down list...</b>");
+                return;
+            }
+            try
+            {
+                SelectDropDown(element, Helpers.Randomizer.Number(1, allOptions));
+            }
+            catch(Exception e)
+            {
+                PropertiesCollection._reportingTasks.Log(Status.Info, "<b>Can't select default value from drop down list...</b><br>" + e.ToString());
+            }
 
         }
 
+       
 
 
 

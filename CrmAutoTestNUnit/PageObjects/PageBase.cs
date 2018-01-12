@@ -83,12 +83,22 @@ namespace CrmAutoTestNUnit.PageObjects
         [FindsBy(How = How.CssSelector, Using = ".modal-content")]
         public IWebElement PopUpDetector { get; set; }
 
-        [FindsBy(How = How.CssSelector, Using = "#create-filter-link")]
-        public IWebElement CreateFiltA { get; set; }
+        [FindsBy(How = How.CssSelector, Using = "div.modal-body > form > div.general-error")]
+        public IWebElement PosibleBadReqCreatTrAcc { get; set; }
+        
 
-        [FindsBy(How = How.CssSelector, Using = "div.item.choosen-columns select[name]")]
-        public IList<IWebElement> FiltersDrls { get; set; }
-       
+                [FindsBy(How = How.CssSelector, Using = "#create-filter-link")]
+                public IWebElement CreateFiltA { get; set; }
+
+                [FindsBy(How = How.CssSelector, Using = "div.item.choosen-columns select[name]")]
+                public IList<IWebElement> FiltersDrls { get; set; }
+
+        [FindsBy(How = How.CssSelector, Using = "a.button.button2")]
+        public virtual IWebElement BtnCancel { get; set; }
+
+        [FindsBy(How = How.CssSelector, Using = "label[for*= TransactionTy]")]
+        public virtual IWebElement TransactTypeLabel { get; set; }
+        
 
         string recordsFound = "div.jsgrid-items-counter > span";
         string dropdownSelectPerPage = "select[class*=records-list]";
@@ -126,9 +136,6 @@ namespace CrmAutoTestNUnit.PageObjects
             Paging paging = new Paging();
             //string url = "http://crm.staging.fxtoptech.com/api/moduleitems/3?filterId=5";   //for lead json
             //paging.ItemsFound(url);    
-            //paging.SelectPerPage(StyleFolderPaging, driver.FindElement(By.CssSelector(StyleFolderPaging.dropdownSelectPerPage)));
-            //Thread.Sleep(2000);
-            //paging.GetPagesQuantity(StyleFolderPaging);
             paging.CheckPaging(ClientsPaging);
         }
 
@@ -186,13 +193,16 @@ namespace CrmAutoTestNUnit.PageObjects
                             //ASC
             for (int i = 0; i < gridHeaders.Count; i++)
             {
+                SeleniumGetMethod.WaitForElement(driver, gridHeaders[i]);
                 gridHeaders[i].Click();
                 SeleniumGetMethod.WaitForPageLoad(driver);
                 SeleniumGetMethod.WaitForElement(driver, gridHeaders[i]);
+                Thread.Sleep(2000);
                         //DESC
                 gridHeaders[i].Click();
                 SeleniumGetMethod.WaitForPageLoad(driver);
                 SeleniumGetMethod.WaitForElement(driver, gridHeaders[i]);
+                Thread.Sleep(2000);
                 var text = gridHeaders[i].GetAttribute("textContent");
                 PropertiesCollection._reportingTasks.Log(Status.Info, "Sort by column" + " " + (i + 1) + " column name is " + text);
             }
@@ -205,43 +215,18 @@ namespace CrmAutoTestNUnit.PageObjects
             Thread.Sleep(3000);
             for (int i = 0; i < FiltersDrls.Count; i++)
             {
-                SeleniumSetMethods.SelectDropDown(FiltersDrls[i], 1);
+                var allFlters = driver.FindElements(By.CssSelector("div.item.choosen-columns select[name]"));
+                if (SeleniumGetMethod.GetQuantityOfOptionsInDropDown(allFlters[i]) < 2)   break;
+                SeleniumSetMethods.SelectDropDown(allFlters[i],i+1);
                 Thread.Sleep(2000);
             }
+            BtnCancel.Click();
+            Thread.Sleep(2000);
         }
 
 
         public virtual void CheckSearch() 
         {
-            for (int i = 0; i < SearchFormCreatedDate.Count; i++)
-            {
-                SeleniumGetMethod.WaitForElement(driver, SearchFormCreatedDate[i]);
-                SearchFormCreatedDate[i].Click();
-                try
-                {
-                    foreach (var date in CalendarBoxFromTo)
-                    {
-                        if (date.Displayed)
-                        {
-                            date.Clear();
-                            date.SendKeys(WindowsMessages.GetCurDate(1));
-                            SeleniumGetMethod.WaitForPageLoad(driver);           
-                        }
-                    }
-                    if(BtnApply[i].Displayed)
-                    {
-                        SeleniumGetMethod.WaitForElement(driver, BtnApply[i]);
-                        BtnApply[i].Click();
-                        SeleniumGetMethod.WaitForPageLoad(driver);
-                        Thread.Sleep(1000);
-                        SeleniumGetMethod.WaitForPageLoad(driver);
-                    }  
-                }
-                catch (Exception msg)
-                {
-                    PropertiesCollection._reportingTasks.Log(Status.Info, "Can't manipulate calendarboxes..<br>" + msg.ToString());
-                }
-            }
             foreach (var drl in SearchFormDropDowns)
             {
                 SeleniumSetMethods.SelectDropDown(drl, 1);
@@ -254,11 +239,43 @@ namespace CrmAutoTestNUnit.PageObjects
             }     
             SeleniumGetMethod.WaitForPageLoad(driver);
             Thread.Sleep(3000);
+            for (int i = 0; i < SearchFormCreatedDate.Count; i++)
+            {
+                SeleniumGetMethod.WaitForElement(driver, SearchFormCreatedDate[i]);
+                SearchFormCreatedDate[i].Click();
+                try
+                {
+                    foreach (var date in CalendarBoxFromTo)
+                    {
+                        if (date.Displayed)
+                        {
+                            date.Clear();
+                            date.SendKeys(WindowsMessages.GetCurDate(1));
+                            SeleniumGetMethod.WaitForPageLoad(driver);
+                        }
+                    }
+                    if (BtnApply[i].Displayed)
+                    {
+                        SeleniumGetMethod.WaitForElement(driver, BtnApply[i]);
+                        BtnApply[i].Click();
+                        SeleniumGetMethod.WaitForPageLoad(driver);
+                        Thread.Sleep(1000);
+                        SeleniumGetMethod.WaitForPageLoad(driver);
+                    }
+                }
+                catch (Exception msg)
+                {
+                    PropertiesCollection._reportingTasks.Log(Status.Info, "Can't manipulate calendarboxes..<br>" + msg.ToString());
+                }
+            }
+            Thread.Sleep(2000);
+            BtnSearch.Click();
+            SeleniumGetMethod.WaitForPageLoad(driver);
+            Thread.Sleep(2000);
             try
             {
                 xClearAllFilters.Click();
                 Thread.Sleep(2000);
-                BtnSearch.Click();
             }
             catch (Exception msg)
             {

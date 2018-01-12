@@ -18,7 +18,7 @@ namespace CrmAutoTestNUnit.Helpers
 {
     public class WindowsMessages
     {
-        public bool IsAlertPresent()
+        public static bool IsAlertPresent()
         {
             try
             {
@@ -26,9 +26,9 @@ namespace CrmAutoTestNUnit.Helpers
                 PropertiesCollection._reportingTasks.Log(Status.Info, "Alert exists");
                 return true;
             }
-            catch (NoAlertPresentException)
+            catch (NoAlertPresentException e)
             {
-                PropertiesCollection._reportingTasks.Log(Status.Info, "There is No Alert!");
+                PropertiesCollection._reportingTasks.Log(Status.Info, "There is No Alert!<br>" + e.ToString());
                 return false;
             }
         }

@@ -47,15 +47,17 @@ namespace CrmAutoTestNUnit.Test
         }
 
         [Test, Category("Check Search")]
-        [Ignore("Ignore a fixture")]
+        //[Ignore("Ignore a fixture")]
         public void CheckSearchClientsAllSubFolders()
         {
          
             var pageAccounts = _pages.GetPage<PageObjectAccounts>();
+            var pageBase = _pages.GetPage<PageBase>();
             for (int i = 0; i < pageAccounts.SubFolderItemsClients.Count; i++)
             {
                 el.OpenTargetSubfolder(pageAccounts.LinksPanel[0], pageAccounts.SubFolderItemsClients, i);
                 pageAccounts.CheckSearch();
+                pageBase.CheckSearch();
             }
 
         }
@@ -63,7 +65,7 @@ namespace CrmAutoTestNUnit.Test
 
         [Test, Category("Check PAGING")]
         //[Repeat(3)]
-        //[Ignore("Ignore a fixture")]
+        [Ignore("Ignore a fixture")]
         public void TryCheckPaging()
         {
             var pageAccounts = _pages.GetPage<PageObjectAccounts>();
@@ -111,7 +113,7 @@ namespace CrmAutoTestNUnit.Test
 
 
         [Test, Category("Check Lead Folder")]
-        [Ignore("Ignore a fixture")]
+        //[Ignore("Ignore a fixture")]
         public void CheckLeadFolder()
         {
          
@@ -129,17 +131,17 @@ namespace CrmAutoTestNUnit.Test
        // [Repeat(3)]
         public void CheckAccountFolder()
         {
-          
             var pageAccounts = _pages.GetPage<PageObjectAccounts>();
             pageAccounts.OpenAccountTab();
-            // pageAccounts.CreateValidAcc();
+            //pageAccounts.CreateValidAcc();
             pageAccounts.CreateNewAccount("account");
             Thread.Sleep(3000);
         }
 
 
+
         [Test, Category("Check Account Folder")]
-        [Ignore("Ignore a fixture")]
+       // [Ignore("Ignore a fixture")]
         public void CreateAccAndLeadEmailFollow()
         {
             var pageAccounts = _pages.GetPage<PageObjectAccounts>();
@@ -155,7 +157,7 @@ namespace CrmAutoTestNUnit.Test
         }
 
         [Test, Category("Check Account Lead Mark Info")]
-        [Ignore("Ignore a fixture")]
+       // [Ignore("Ignore a fixture")]
         public void CheckMarkInfoLeadAcc()
         {
             var pageAccounts = _pages.GetPage<PageObjectAccounts>();
@@ -167,8 +169,15 @@ namespace CrmAutoTestNUnit.Test
         [Ignore("Ignore a fixture")]
         public void CheckDbConnetection()
         { 
-            db.ConnectToDbTest();           
+            db.ConnectToDbTest();
+
+            
         }
+
+
+
+      
+
 
 
     }

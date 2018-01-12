@@ -26,9 +26,10 @@ namespace CrmAutoTestNUnit
                 driver.Manage().Timeouts().ImplicitWait = TestsConfiguration.Instance.ImplicitlyWait;
                 return true;
             }
-            catch (NoSuchElementException)
+            catch (NoSuchElementException msg)
             {
                 driver.Manage().Timeouts().ImplicitWait = TestsConfiguration.Instance.ImplicitlyWait;
+                PropertiesCollection._reportingTasks.Log(Status.Info, "Looks like element doesn't exist <br>" + msg.ToString());
                 return false;
             }
         }
@@ -41,9 +42,10 @@ namespace CrmAutoTestNUnit
                 driver.Manage().Timeouts().ImplicitWait = TestsConfiguration.Instance.ImplicitlyWait;
                 return true;
             }
-            catch (NoSuchElementException)
+            catch (NoSuchElementException msg)
             {
                 driver.Manage().Timeouts().ImplicitWait = TestsConfiguration.Instance.ImplicitlyWait;
+                PropertiesCollection._reportingTasks.Log(Status.Info, "Looks like element is not enable <br>" + msg.ToString());
                 return false;
             }
         }
@@ -60,9 +62,10 @@ namespace CrmAutoTestNUnit
                     ExpectedConditions.ElementToBeClickable(element);
                     return true;
                 }
-                catch (Exception)
+              
+                catch (Exception msg)
                 {
-                    PropertiesCollection._reportingTasks.Log(Status.Info, "Can't wait for element");
+                    PropertiesCollection._reportingTasks.Log(Status.Info, "Can't wait for element <br>" + msg.ToString());
                     return false;
                 }
             });
@@ -89,15 +92,18 @@ namespace CrmAutoTestNUnit
                 catch (InvalidOperationException e)
                 {
                     //Window is no longer available
+                    PropertiesCollection._reportingTasks.Log(Status.Info,  e.ToString());
                     return e.Message.ToLower().Contains("unable to get browser");
                 }
                 catch (WebDriverException e)
                 {
                     //Browser is no longer available
+                    PropertiesCollection._reportingTasks.Log(Status.Info, e.ToString());
                     return e.Message.ToLower().Contains("unable to connect");
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    PropertiesCollection._reportingTasks.Log(Status.Info, e.ToString());
                     return false;
                 }
             });
